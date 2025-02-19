@@ -1,37 +1,14 @@
 def main():
     book_path = "books/frankenstein.txt"
     text = get_book_text(book_path)
-    num_words = get_num_words(text)
+    get_num_words(text)
     chars_dict = get_chars_dict(text)
-    chars_sorted_list = chars_dict_to_sorted_list(chars_dict)
-
-    print(f"--- Begin report of {book_path} ---")
-    print(f"{num_words} words found in the document")
-    print()
-
-    for item in chars_sorted_list:
-        if not item["char"].isalpha():
-            continue
-        print(f"The '{item['char']}' character was found {item['num']} times")
-
-    print("--- End report ---")
-
+    print_letter_report(chars_dict)
+    
 
 def get_num_words(text):
     words = text.split()
-    return len(words)
-
-
-def sort_on(d):
-    return d["num"]
-
-
-def chars_dict_to_sorted_list(num_chars_dict):
-    sorted_list = []
-    for ch in num_chars_dict:
-        sorted_list.append({"char": ch, "num": num_chars_dict[ch]})
-    sorted_list.sort(reverse=True, key=sort_on)
-    return sorted_list
+    return print(f"This report contains {len(words)} words")
 
 
 def get_chars_dict(text):
@@ -43,6 +20,20 @@ def get_chars_dict(text):
         else:
             chars[lowered] = 1
     return chars
+
+def remove_numeric_string_keys(d):
+    keys_to_remove = [key for key in d if not key.isalpha() or key == '']
+    for key in keys_to_remove:
+        del d[key]
+    return d
+
+def print_letter_report(chars):
+    just_letters = remove_numeric_string_keys(chars)
+    print("---The letter report---")
+    for c in just_letters:
+        print(f"The '{c}' charcter was found {just_letters[c]} times")
+   
+    print("--- End report ---")
 
 
 def get_book_text(path):
